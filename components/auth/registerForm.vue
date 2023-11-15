@@ -1,24 +1,36 @@
 <template>
   <div>
     <h2 class="mb-[34px]">Rejestracja</h2>
-    <Form @submit="updateCompany" :validation-schema="schemaCompany">
-      <!-- v-slot="{ values, meta }" -->
+    <Form
+      @submit="RegisterUser"
+      :validation-schema="schemaUser"
+      v-slot="{ errors }"
+      @click="clearError"
+    >
       <InputBase
-        name="name"
-        placeholder="Imię i nazwisko"
+        name="first_name"
+        placeholder="Imię"
         type="text"
         icon="solar:user-outline"
       />
       <InputBase
-        name="e-mail"
+        name="last_name"
+        placeholder="Nazwisko"
+        type="text"
+        icon="solar:user-outline"
+        class="mt-[12px]"
+      />
+      <InputBase
+        name="email"
         placeholder="E-mail"
+        :error="errorEmail"
         type="text"
         icon="solar:letter-linear"
         class="mt-[12px]"
       />
       <div class="relative">
         <InputBase
-          name="passwortd"
+          name="password"
           :type="currentType1"
           placeholder="Hasło"
           icon="solar:key-minimalistic-linear"
@@ -46,7 +58,7 @@
       </div>
       <div class="relative">
         <InputBase
-          name="passwortdwsd"
+          name="password_confirmation"
           :type="currentType2"
           placeholder="Powtórz hasło"
           icon="solar:key-minimalistic-linear"
@@ -72,14 +84,25 @@
           />
         </p>
       </div>
-      <div class="flex w-full ">
-        <p to="/" class="text-[14px] family mt-[24px]"
-          >Akceptuję politykę prywatności</p
-        >
+      <div class="mt-4">
+        <label for="acceptTerms" class="form-control custom-checkbox">
+          <Field name="acceptTerms" type="checkbox" id="acceptTerms" :value="true" />
+          <span class="custom-checkbox"></span>
+          <span class="custom-checkbox-label"
+            >Akceptuję regulamin i politykę prywatności</span
+          >
+        </label>
+        <p class="text-red-500 text-[13px] bg-white mt-1">{{ errors.acceptTerms }}</p>
       </div>
-      <div class="relative pt-[16px]">
-        <button class="primary-button" type="submit" v-if="!isLoadingButton">Zarejestruj się</button>
-        <button class="primary-button" type="submit" v-else><loading-spinner /></button>
+
+      <div class="pt-[16px]">
+        <p class="family text-[14px] text-red-500 mb-5">{{ registerError }}</p>
+        <button class="primary-button" type="submit" v-if="!isLoadingButton">
+          Zarejestruj się
+        </button>
+        <button class="primary-button-loading" type="submit" v-else>
+          <loading-spinner />
+        </button>
       </div>
     </Form>
   </div>
@@ -88,10 +111,11 @@
 <script setup lang="ts">
 import * as yup from "yup";
 import { Form, Field, useForm } from "vee-validate";
-const loginError = ref<any>("I chuj nie zalogowało się");
-// const loginError = ref<any>(null);
+const registerError = ref<any>(null) as any;
 const currentType1 = ref("password");
 const currentType2 = ref("password");
+const token = useCookie("token") as any;
+const errorEmail = ref(null) as any;
 const isLoadingButton = ref(false);
 
 const changePasswordType = (inputNumber: number) => {
@@ -102,21 +126,71 @@ const changePasswordType = (inputNumber: number) => {
   }
 };
 
-const updateCompany = (values: any) => {
-  alert("Update Company" + values.name);
+const RegisterUser = async (values: any) => {
+  const data = {
+    first_name: values.first_name,
+    last_name: values.last_name,
+    email: values.email,
+    password: values.password,
+  };
+  isLoadingButton.value = true;
+  try {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const res = (await axiosInstance.post("/auth/register", data)) as any;
+    token.value = res.data.token;
+  } catch (error: any) {
+    isLoadingButton.value = false;
+    errorEmail.value = true;
+    registerError.value = "Podany adres e-mail już istnieje";
+  } finally {
+    isLoadingButton.value = false;
+  }
 };
-const schemaCompany = yup.object().shape({
-  name: yup
+const clearError = () => {
+  registerError.value = null;
+  errorEmail.value = null;
+};
+const schemaUser = yup.object().shape({
+  acceptTerms: yup.bool().required("Zgoda jest wymagana"),
+  first_name: yup
     .string()
-    .test("valid-name", "Nieprawidłowa nazwa działalności", (value) => {
+    .test("valid-name", "Nieprawidłowe imię", (value: any) => {
       if (!value) return true;
-      const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ][a-zA-ZĄĆĘŁŃÓŚŹŻąćęłńóśźż0-9\s]*$/u;
+      const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s]*$/u;
       return nameRegex.test(value);
     })
-    .max(35, "Nazwa działalności nie może mieć więcej niż 35 znaków")
-    .required("Pole wymagane"),
+    .max(20, "Imię nie może mieć więcej niż 20 znaków")
+    .required("Uzupełnij swoję imię"),
+  last_name: yup
+    .string()
+    .test("valid-name", "Nieprawidłowe nazwisko", (value: any) => {
+      if (!value) return true;
+      const nameRegex = /^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s]*$/u;
+      return nameRegex.test(value);
+    })
+    .max(20, "Nazwisko nie może mieć więcej niż 20 znaków")
+    .required("Uzupełnij swoję nazwisko"),
+  email: yup
+    .string()
+    .test("valid-email", "Nieprawidłowy adres e-mail", (value) => {
+      if (!value || value === "") return true;
+      const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+      return emailRegex.test(value);
+    })
+    .required("Uzupełnij adres e-mail"),
+  password: yup
+    .string()
+    .min(6, "Hasło musi mieć przynajmniej 6 znaków")
+    .matches(
+      /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]+$/,
+      "Hasło musi zawierać przynajmniej jedną dużą literę i jeden znak specjalny"
+    )
+    .required("Uzupełnij hasło"),
+  password_confirmation: yup
+    .string()
+    .oneOf([yup.ref("password")], "Hasła muszą być takie same") // Dodaj walidację na potwierdzenie hasła
+    .required("Potwierdź hasło"),
 });
 </script>
 
 <style scoped></style>
-

@@ -1,6 +1,7 @@
 <template>
   <NavHeader />
   <div class="w-[1500px]  mx-auto mb-[170px]">
+    {{ counter }}
     <div class="w-full flex justify-between mt-[84px] place-items-center">
       <div class="border-l-[7px] border-[#2BB069] pl-[38px] h-[430px] pt-7">
         <h1>Twoje ulubione restauracje</h1>
@@ -67,6 +68,8 @@
   <NavBottom />
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const counter = useCookie('counter') as any
+</script>
 
 <style scoped></style>

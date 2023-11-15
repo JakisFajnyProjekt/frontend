@@ -1,4 +1,6 @@
 <template>
+  <!-- {{ color }}
+  {{ errorMessage }} -->
   <div class="relative flex flex-col w-full">
     <div
       class="absolute h-[50px] border-r w-[54px]"
@@ -34,7 +36,7 @@ import { useField } from "vee-validate";
 import { modes } from "@/utils/interactionModes";
 const color = ref("#CCCCCC") as any;
 
-const hasError = ref(false);
+// const hasError = ref(false);
 const inputFocus = () => {
   color.value = "#2BB069";
 };
@@ -46,6 +48,9 @@ const inputBlur = () => {
 const props = defineProps({
   name: {
     type: String,
+  },
+  error: {
+    type: Boolean || null,
   },
   type: {
     type: String,
@@ -76,7 +81,6 @@ const { meta, value, errorMessage, handleChange, handleBlur } = useField(
     validateOnValueUpdate: false,
   }
 );
-
 const handlers = computed(() => {
   const on: Record<string, any> = {
     blur: handleBlur,
@@ -97,6 +101,13 @@ const handlers = computed(() => {
   });
 
   return on;
+});
+watch(props as any, (newValue) => {
+  if (newValue.error == true) {
+    color.value = "#ef4444";
+  } else {
+    color.value = "#CCCCCC";
+  }
 });
 </script>
 

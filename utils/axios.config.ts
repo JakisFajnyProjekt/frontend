@@ -1,17 +1,14 @@
 import axios from 'axios'
-
-const API_URL = 'http://localhost:8080/api';
-
+import Cookies from 'js-cookie';
+// const API_URL = 'http://localhost:8080/api';
+const API_URL = 'http://16.170.229.196/api'
 export const axiosInstance = axios.create({
     baseURL: API_URL,
     headers: {
-        // "Content-Type": "application/json",
+        "Content-Type": "application/json",
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
-        // 'Access-Control-Allow-Credentials': 'true',
-        Accept: "application/json",
-        credentials: false,
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+         Authorization: `Bearer ${Cookies.get('token') || ''}`,
 
     }
 })
