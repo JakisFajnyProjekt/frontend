@@ -25,7 +25,8 @@ export const useAuth = defineStore('auth', {
                 this.token = res.data.token
                 this.loggedIn = true
                 Cookies.set('token', this.token)
-                useRouter().push('/restauracje')
+                // useRouter().push('/restauracje')
+                window?.location?.replace("/restauracje");
             }
             catch (error: any) {
                 this.isLoadingButton = false;
@@ -48,7 +49,8 @@ export const useAuth = defineStore('auth', {
             this.loggedIn = false
             Cookies.remove('token')
             this.token = null;
-            useRouter().push('/')
+            window?.location?.replace("/");
+            // useRouter().push('/')
         }
     }
 })

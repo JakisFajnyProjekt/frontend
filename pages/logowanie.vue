@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-// definePageMeta({
-//   middleware: "user",
-// });
+definePageMeta({
+  middleware: "user",
+});
 </script>
 
 <style scoped></style>
