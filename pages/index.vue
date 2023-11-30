@@ -1,7 +1,6 @@
 <template>
   <NavHeader />
   <div class="w-[1500px]  mx-auto mb-[170px]">
-    {{ counter }}
     <div class="w-full flex justify-between mt-[84px] place-items-center">
       <div class="border-l-[7px] border-[#2BB069] pl-[38px] h-[430px] pt-7">
         <h1>Twoje ulubione restauracje</h1>
@@ -13,7 +12,7 @@
         </p>
         <div class="flex gap-3 mt-[24px]">
           <div class="w-[300px]">
-            <InputBase
+            <Input
               name="e-mail"
               placeholder="Twoja lokalizacja..."
               type="text"
@@ -69,7 +68,41 @@
 </template>
 
 <script setup lang="ts">
-const counter = useCookie('counter') as any
+
+definePageMeta({
+  middleware: "user",
+});
+// const latitudtoken
+// const longitude = ref<number | null>(null);
+// // Check if the code is running in a browser environment
+// if (process.browser && "geolocation" in navigator) {
+//   // Pobierz lokalizację
+//   onMounted(() => {
+//     navigator.geolocation.getCurrentPosition(
+//       (position) => {
+//         // Pobrane dane o lokalizacji są dostępne w obiekcie position
+//         latitude.value = position.coords.latitude;
+//         longitude.value = position.coords.longitude;
+//       },
+//       (error) => {
+//         // Obsłuż błędy, jeśli wystąpią
+//         switch (error.code) {
+//           case error.PERMISSION_DENIED:
+//             console.log("Użytkownik nie udzielił zgody na udostępnienie lokalizacji.");
+//             break;
+//           case error.POSITION_UNAVAILABLE:
+//             console.log("Informacje o lokalizacji są niedostępne.");
+//             break;
+//           case error.TIMEOUT:
+//             console.log("Przekroczono czas oczekiwania na uzyskanie lokalizacji.");
+//             break;
+//         }
+//       }
+//     );
+//   });
+// } else {
+//   console.log("Twoja przeglądarka nie obsługuje Geolocation lub kod nie jest uruchamiany w przeglądarce.");
+// }
 </script>
 
 <style scoped></style>

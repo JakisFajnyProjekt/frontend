@@ -1,16 +1,14 @@
 <template>
-  <!-- {{ color }}
-  {{ errorMessage }} -->
   <div class="relative flex flex-col w-full">
     <div
-      class="absolute h-[50px] border-r w-[54px]"
+      class="absolute h-[45px]"
       :class="{ 'test-active': errorMessage ? true : false }"
       :style="{ borderColor: color }"
     >
       <Icon
         :name="props.icon"
-        size="37"
-        class="pt-3 mx-auto flex w-full"
+        size="24"
+        class="mt-[10px] mx-auto flex w-full ml-[12px]"
         :color="isError(errorMessage ? false : true, color)"
       />
     </div>
@@ -34,7 +32,7 @@
 <script setup lang="ts">
 import { useField } from "vee-validate";
 import { modes } from "@/utils/interactionModes";
-const color = ref("#CCCCCC") as any;
+const color = ref("#9B9B9B") as any;
 
 // const hasError = ref(false);
 const inputFocus = () => {
@@ -42,7 +40,7 @@ const inputFocus = () => {
 };
 
 const inputBlur = () => {
-  color.value = "#CCCCCC";
+  color.value = "#9B9B9B";
 };
 
 const props = defineProps({
@@ -106,7 +104,7 @@ watch(props as any, (newValue) => {
   if (newValue.error == true) {
     color.value = "#ef4444";
   } else {
-    color.value = "#CCCCCC";
+    color.value = "#9B9B9B";
   }
 });
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div>
     <h2 class="mb-[34px]">Logowanie</h2>
-    <Form @submit="loginIn" @click="clearError">
+    <Form @submit="loginUser" @click="clearError">
       <InputBase
-        name="email"
-        :error="errorEmail"
+      name="email"
+      :error="errorValue?.includes('e-mail')"
         placeholder="E-mail"
         type="text"
         icon="solar:letter-linear"
@@ -12,11 +12,11 @@
       />
       <div class="relative">
         <InputBase
-          name="password"
-          :error="errorPassword"
+        name="password"
+        :error="errorValue?.includes('hasło')"
           :type="currentType"
           placeholder="Hasło"
-          :hasError="true"
+          :hasError="false"
           icon="solar:key-minimalistic-linear"
           class="mt-[21px]"
         />
@@ -47,7 +47,9 @@
       </div>
       <div class="relative pt-[48px]">
         <div class="absolute top-1.5">
-          <p class="family text-[14px] text-red-500">{{ loginError }}</p>
+          <p class="family text-[14px] text-red-500">{{ errorValue}}</p>
+
+          <!-- <p class="family text-[14px] text-red-500">{{ loginError }}</p> -->
         </div>
         <button class="primary-button" type="submit" v-if="!isLoadingButton">
           Zaloguj się
@@ -67,14 +69,22 @@
 </template>
 
 <script setup lang="ts">
-import { Form, Field, useForm } from "vee-validate";
-import { axiosInstance } from "@/utils/axios.config";
-const loginError = ref<any>(null);
-const currentType = ref("password");
-const isLoadingButton = ref(false);
-const token = useCookie("token") as any;
-const errorEmail = ref(null) as any;
-const errorPassword = ref(null) as any;
+import { Form, Field, useForm } from "vee-validate"
+import { axiosInstance } from "@/utils/axios.config"
+import {storeToRefs} from 'pinia'
+import {useAuth} from "@/store/useAuth"
+const loginError = ref<any>(null)
+const currentType = ref("password")
+import Cookies from 'js-cookie';
+const test = Cookies.get('token')
+// const isLoadingButton = ref(false)
+const router = useRouter()
+// const token = useCookie("token") as any
+const errorEmail = ref(null) as any
+const errorPassword = ref(null) as any
+
+const authState = useAuth()
+const { isLoadingButton, errorValue, token, loggedIn} = storeToRefs(authState)
 
 const changePasswordType = () => {
   if (currentType.value == "password") {
@@ -85,42 +95,52 @@ const changePasswordType = () => {
   }
 };
 
-const loginIn = async (values: any) => {
-  const data = {
-    email: values.email,
-    password: values.password,
-  };
 
-  isLoadingButton.value = true;
+const loginUser = async(values:any)=>{
+  await authState.login(values.email, values.password)
+}
 
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+// const loginIn = async (values: any) => {
+//   const data = {
+//     email: values.email,
+//     password: values.password,
+//   };
 
-    const res = (await axiosInstance.post("/auth/login", data)) as any;
-    token.value = res.data.token;
-  } catch (error: any) {
-    isLoadingButton.value = false;
+//   isLoadingButton.value = true;
 
-    if (error.response.data.errors.PASSWORD) {
-      errorPassword.value = true;
-      loginError.value = "Błędne hasło, spróbuj ponownie";
-    } else if (error.response.data.errors.EMAIL) {
-      errorEmail.value = true;
-      loginError.value = "Nie znaleziono użytkownika";
-    } else {
-      errorEmail.value = true;
-      errorPassword.value = true;
-      loginError.value = "Uzupełnij login i hasło";
-    }
-  } finally {
-    isLoadingButton.value = false;
-  }
-};
+//   try {
+//     await new Promise((resolve) => setTimeout(resolve, 1000));
+
+//     const res = (await axiosInstance.post("/auth/login", data)) as any;
+//     token.value = res.data.token;
+//     router.push('/restauracje')
+//   } 
+//   catch (error: any) {
+//     isLoadingButton.value = false;
+
+//     if (error.response.data.errors.PASSWORD) {
+//       errorPassword.value = true;
+//       loginError.value = "Błędne hasło, spróbuj ponownie";
+//     } else if (error.response.data.errors.EMAIL) {
+//       errorEmail.value = true;
+//       loginError.value = "Nie znaleziono użytkownika";
+//     } else {
+//       errorEmail.value = true;
+//       errorPassword.value = true;
+//       loginError.value = "Uzupełnij login i hasło";
+//     }
+//   } finally {
+//     isLoadingButton.value = false;
+//   }
+// };
 
 const clearError = () => {
-  loginError.value = null;
-  errorPassword.value = null;
-  errorEmail.value = null;
+  setTimeout(()=>{
+  errorValue.value = null;
+  },500)
+  // loginError.value = null;
+  // errorPassword.value = null;
+  // errorEmail.value = null;
 };
 </script>
 

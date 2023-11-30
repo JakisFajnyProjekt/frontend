@@ -113,6 +113,7 @@ import * as yup from "yup";
 import { Form, Field, useForm } from "vee-validate";
 const registerError = ref<any>(null) as any;
 const currentType1 = ref("password");
+const router = useRouter()
 const currentType2 = ref("password");
 const token = useCookie("token") as any;
 const errorEmail = ref(null) as any;
@@ -137,7 +138,8 @@ const RegisterUser = async (values: any) => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const res = (await axiosInstance.post("/auth/register", data)) as any;
-    token.value = res.data.token;
+    token.value = res.data.token
+    router.push('/restauracje')
   } catch (error: any) {
     isLoadingButton.value = false;
     errorEmail.value = true;

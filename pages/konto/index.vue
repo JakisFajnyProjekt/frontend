@@ -1,20 +1,17 @@
 <template>
   <NuxtLayout name="default">
     <div class="flex place-items-center justify-between">
-      <div class="w-[345px]">
-        <AuthRegisterForm/>
-      </div> 
-      <div class="">
-        <img src="../assets/file/Auth_hero.png" class="h-[500px]"/>
-      </div>
+<h1>moje konto</h1>
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
+
 definePageMeta({
-  middleware: "user",
+   middleware: "auth",
 });
+
 </script>
 
 <style scoped></style>

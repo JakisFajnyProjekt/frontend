@@ -1,7 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300;400;500;600;700&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url("https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;200;300;400;500;600;700&display=swap");
 
 .family {
   font-family: "Work Sans", sans-serif;
@@ -11,42 +12,42 @@ h2 {
   font-size: 38px;
   font-style: normal;
   font-weight: 600;
- line-height: 55px; 
+  line-height: 55px;
 }
 h1 {
   font-family: "Work Sans", sans-serif;
   font-size: 61px;
   font-style: normal;
   font-weight: 600;
-line-height: 87px; 
+  line-height: 87px;
 }
 .primary-color {
   color: #2bb069;
 }
 
-.primary-button-loading  {
+.primary-button-loading {
   border-radius: 9999999px;
   width: 100%;
-  height: 50px;
+  height: 45px;
   padding: 12px;
   background: rgba(44, 184, 108, 0.62);
   color: white;
   font-size: 17px;
   font-family: "Work Sans", sans-serif;
 }
-.primary-button{
+.primary-button {
   border-radius: 9999999px;
   width: 100%;
-  height: 50px;
-  padding: 12px;
+  height: 45px;
   background: #2bb069;
   color: white;
+  font-weight: 500;
   font-size: 17px;
   font-family: "Work Sans", sans-serif;
-   transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
-.primary-button:hover{
-  background: #25A661;
+.primary-button:hover {
+  background: #25a661;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.13);
 }
 input {
@@ -55,22 +56,29 @@ input {
 }
 .base-input {
   font-family: "Work Sans", sans-serif;
-  font-weight: 100;
+  font-weight: 400;
   background-color: #f3f3f3;
   display: flex;
   border-radius: 100px;
-  height: 47px;
+  height: 45px;
   place-items: center;
-  padding: 25px 25px 25px 68px;
+  padding: 22px 23px 22px 54px;
   transition: border-color 0.3s;
 }
 
 .base-input::placeholder {
   font-family: "Work Sans", sans-serif;
-  font-weight: 100;
-  font-size: 15px;
+  font-weight: 400;
+  font-size: 16px;
   color: #9b9b9b;
 }
 .base-input:focus {
   outline: none;
+}
+
+.blur-background-update {
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(3px);
+  width: 100%;
+  height: 100vh;
 }
