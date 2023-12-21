@@ -100,13 +100,13 @@ const handlers = computed(() => {
 
   return on;
 });
-watch(props as any, (newValue) => {
-  if (newValue.error == true) {
-    color.value = "#ef4444";
-  } else {
-    color.value = "#9B9B9B";
-  }
-});
+// watch(props as any, (newValue) => {
+//   if (newValue.error == true) {
+//     color.value = "#ef4444";
+//   } else {
+//     color.value = "#9B9B9B";
+//   }
+// });
 </script>
 
 <style scoped>

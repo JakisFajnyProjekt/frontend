@@ -85,9 +85,9 @@ const isCloseMobile = () => {
 };
 const isModal = () => {
   if (window.screen.width <= 600) {
-    isOpenMobile.value = true;
+    isOpenMobile.value = true
   } else {
-    isOpenDesktop.value = true;
+    isOpenDesktop.value = true
   }
 };
 

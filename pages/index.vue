@@ -4,6 +4,7 @@
     <div class="w-full flex justify-between mt-[84px] place-items-center">
       <div class="border-l-[7px] border-[#2BB069] pl-[38px] h-[430px] pt-7">
         <h1>Twoje ulubione restauracje</h1>
+        {{ cookie?.token }}
         <p class="text-[33px] font-semibold mb-2 family">na wyciągnięcie ręki</p>
         <p class="text-[#9D9D9D] family mt-[16px] font-light leading-[26px]">
           Dzięki naszej aplikacji, możesz wybierać spośród <br />ulubionych dań z
@@ -68,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-
+// const cookie = useCookie('auth')
 definePageMeta({
   middleware: "user",
 });

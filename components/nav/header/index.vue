@@ -1,6 +1,11 @@
 <template>
     <div>
-<NavHeaderUser v-if="loggedIn"/>
+        <!-- {{ loggedIn }}
+        {{ token }} -->
+        {{  cookie.loggedIn  }}
+        {{ cookie }}
+       {{  useAuth.loggedIn }}
+<NavHeaderUser v-if="cookie ? true : false"/>
 <NavHeaderQuest v-else />
     </div>
 </template>
@@ -9,8 +14,12 @@
 import {storeToRefs} from 'pinia'
 import {useAuth} from "@/store/useAuth"
 
-const authState = useAuth()
-const {loggedIn} = storeToRefs(authState)
+const cookie = useCookie('auth')
+// test.val
+// const authState = useAuth()
+// const {loggedIn, token} = storeToRefs(authState)
+// const isLoggedIn = authState.loggedIn;
+// const userToken = authState.token;
 </script>
 
 <style scoped>
